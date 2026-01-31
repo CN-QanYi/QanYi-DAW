@@ -60,11 +60,19 @@ export class Toolbar {
         });
 
         // 音频引擎回调
+        const prevTimeHandler = audioEngine.onTimeUpdate;
         audioEngine.onTimeUpdate = (time) => {
+            if (typeof prevTimeHandler === 'function') {
+                prevTimeHandler(time);
+            }
             this.updateTimeDisplay(time);
         };
 
+        const prevPlayStateHandler = audioEngine.onPlayStateChange;
         audioEngine.onPlayStateChange = (state) => {
+            if (typeof prevPlayStateHandler === 'function') {
+                prevPlayStateHandler(state);
+            }
             this.updatePlayState(state);
         };
     }

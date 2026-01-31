@@ -14,14 +14,14 @@
       <div class="toolbar-left">
         <div class="logo">🎵 QanYi DAW</div>
         <div class="transport-controls">
-          <button id="btn-stop" class="transport-btn" title="停止">
-            <span class="icon">⏹</span>
+          <button id="btn-stop" class="transport-btn" title="停止" aria-label="停止">
+            <span class="icon" aria-hidden="true">⏹</span>
           </button>
-          <button id="btn-play" class="transport-btn" title="播放">
-            <span class="icon">▶</span>
+          <button id="btn-play" class="transport-btn" title="播放" aria-label="播放">
+            <span class="icon" aria-hidden="true">▶</span>
           </button>
-          <button id="btn-pause" class="transport-btn" title="暂停">
-            <span class="icon">⏸</span>
+          <button id="btn-pause" class="transport-btn" title="暂停" aria-label="暂停">
+            <span class="icon" aria-hidden="true">⏸</span>
           </button>
         </div>
         <div class="tempo-control">
@@ -70,7 +70,7 @@
     <footer id="mixer" class="mixer">
       <div class="mixer-header">
         <span>混音器</span>
-        <button id="btn-toggle-mixer" class="toggle-mixer-btn">▼</button>
+        <button id="btn-toggle-mixer" class="toggle-mixer-btn" title="切换混音器" aria-label="切换混音器"><span class="icon" aria-hidden="true">▼</span></button>
       </div>
       <div id="mixer-channels" class="mixer-channels">
         <!-- 混音器通道将动态添加 -->

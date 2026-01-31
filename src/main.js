@@ -446,5 +446,9 @@ class DAWApp {
 }
 
 // 启动应用
-new DAWApp();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new DAWApp());
+} else {
+    new DAWApp();
+}
 

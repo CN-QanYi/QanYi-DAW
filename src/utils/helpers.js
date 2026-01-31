@@ -73,6 +73,9 @@ export function lerp(a, b, t) {
  * @returns {number}
  */
 export function mapRange(value, inMin, inMax, outMin, outMax) {
+    if (inMax === inMin) {
+        return outMin;
+    }
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 }
 

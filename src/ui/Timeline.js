@@ -398,6 +398,7 @@ export class Timeline {
     selectClip(clip) {
         // 取消之前的选择
         if (this.selectedClip) {
+            this.selectedClip.selected = false;
             const prevEl = this.clipElements.get(this.selectedClip.id);
             if (prevEl) {
                 prevEl.classList.remove('selected');

@@ -47,11 +47,23 @@ export class Mixer {
         });
 
         // 点击混音器区域时初始化分析器（用户手势）
-        this.container.addEventListener('click', async () => {
-            if (!this.analyser && audioEngine.audioContext) {
-                await this.initAnalyser();
+        const onMixerClick = async () => {
+            if (this.analyser) {
+                this.container.removeEventListener('click', onMixerClick);
+                return;
             }
-        }, { once: true });
+
+            if (!audioEngine.audioContext) {
+                return;
+            }
+
+            await this.initAnalyser();
+            if (this.analyser) {
+                this.container.removeEventListener('click', onMixerClick);
+            }
+        };
+
+        this.container.addEventListener('click', onMixerClick);
     }
 
     /**

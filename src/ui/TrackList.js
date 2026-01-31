@@ -10,6 +10,13 @@ export class TrackList {
         this.container = document.getElementById('track-items');
         this.btnAddTrack = document.getElementById('btn-add-track');
 
+        if (!this.container) {
+            console.error('TrackList: container #track-items not found');
+        }
+        if (!this.btnAddTrack) {
+            console.error('TrackList: button #btn-add-track not found');
+        }
+
         // 事件回调
         this.onTrackAdd = null;
         this.onTrackSelect = null;
@@ -25,6 +32,8 @@ export class TrackList {
      * 初始化
      */
     init() {
+        if (!this.btnAddTrack) return;
+
         this.btnAddTrack.addEventListener('click', () => {
             this.addNewTrack();
         });
@@ -51,26 +60,69 @@ export class TrackList {
      * @param {Track} track - 音轨对象
      */
     renderTrack(track) {
+                if (!this.container) return;
+
         const trackEl = document.createElement('div');
         trackEl.className = 'track-item';
         trackEl.dataset.trackId = track.id;
 
-        trackEl.innerHTML = `
-      <div class="track-header">
-        <div class="track-name">
-          <span class="track-color" style="background: ${track.color}"></span>
-          <span class="track-name-text">${track.name}</span>
-        </div>
-        <div class="track-controls">
-          <button class="track-ctrl-btn mute-btn ${track.muted ? 'active' : ''}" title="静音">M</button>
-          <button class="track-ctrl-btn solo-btn ${track.solo ? 'active' : ''}" title="独奏">S</button>
-        </div>
-      </div>
-      <div class="track-volume">
-        <input type="range" class="volume-slider" min="0" max="100" value="${Math.round(track.volume * 100)}">
-        <span class="volume-value">${Math.round(track.volume * 100)}%</span>
-      </div>
-    `;
+                const headerEl = document.createElement('div');
+                headerEl.className = 'track-header';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'track-name';
+
+                const colorEl = document.createElement('span');
+                colorEl.className = 'track-color';
+                colorEl.style.background = track.color;
+
+                const nameTextEl = document.createElement('span');
+                nameTextEl.className = 'track-name-text';
+                nameTextEl.textContent = track.name;
+
+                nameEl.appendChild(colorEl);
+                nameEl.appendChild(nameTextEl);
+
+                const controlsEl = document.createElement('div');
+                controlsEl.className = 'track-controls';
+
+                const muteBtn = document.createElement('button');
+                muteBtn.className = `track-ctrl-btn mute-btn${track.muted ? ' active' : ''}`;
+                muteBtn.title = '静音';
+                muteBtn.type = 'button';
+                muteBtn.textContent = 'M';
+
+                const soloBtn = document.createElement('button');
+                soloBtn.className = `track-ctrl-btn solo-btn${track.solo ? ' active' : ''}`;
+                soloBtn.title = '独奏';
+                soloBtn.type = 'button';
+                soloBtn.textContent = 'S';
+
+                controlsEl.appendChild(muteBtn);
+                controlsEl.appendChild(soloBtn);
+
+                headerEl.appendChild(nameEl);
+                headerEl.appendChild(controlsEl);
+
+                const volumeEl = document.createElement('div');
+                volumeEl.className = 'track-volume';
+
+                const volumeSlider = document.createElement('input');
+                volumeSlider.type = 'range';
+                volumeSlider.className = 'volume-slider';
+                volumeSlider.min = '0';
+                volumeSlider.max = '100';
+                volumeSlider.value = String(Math.round(track.volume * 100));
+
+                const volumeValue = document.createElement('span');
+                volumeValue.className = 'volume-value';
+                volumeValue.textContent = `${Math.round(track.volume * 100)}%`;
+
+                volumeEl.appendChild(volumeSlider);
+                volumeEl.appendChild(volumeValue);
+
+                trackEl.appendChild(headerEl);
+                trackEl.appendChild(volumeEl);
 
         // 选择音轨
         trackEl.addEventListener('click', (e) => {
@@ -80,7 +132,6 @@ export class TrackList {
         });
 
         // 静音按钮
-        const muteBtn = trackEl.querySelector('.mute-btn');
         muteBtn.addEventListener('click', () => {
             track.toggleMute();
             muteBtn.classList.toggle('active', track.muted);
@@ -88,16 +139,11 @@ export class TrackList {
         });
 
         // 独奏按钮
-        const soloBtn = trackEl.querySelector('.solo-btn');
         soloBtn.addEventListener('click', () => {
             track.toggleSolo();
             soloBtn.classList.toggle('active', track.solo);
             this.handleSoloLogic();
         });
-
-        // 音量滑块
-        const volumeSlider = trackEl.querySelector('.volume-slider');
-        const volumeValue = trackEl.querySelector('.volume-value');
 
         volumeSlider.addEventListener('input', (e) => {
             const volume = parseInt(e.target.value, 10) / 100;
@@ -121,9 +167,9 @@ export class TrackList {
 
         audioEngine.tracks.forEach(track => {
             if (hasSolo) {
-                // 有独奏时，非独奏音轨静音
+                // 有独奏时：静音优先，其次独奏保留音量，其他为 0
                 if (track.gainNode) {
-                    track.gainNode.gain.value = track.solo ? track.volume : 0;
+                    track.gainNode.gain.value = track.muted ? 0 : (track.solo ? track.volume : 0);
                 }
             } else {
                 // 无独奏时，恢复正常

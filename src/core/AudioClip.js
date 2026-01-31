@@ -26,7 +26,7 @@ export class AudioClip {
         this.duration = options.duration || (this.audioBuffer ? this.audioBuffer.duration : 0);
 
         // 增益参数
-        this.gain = 1.0;
+        this.gain = typeof options.gain === 'number' ? options.gain : 1.0;
 
         // 波形数据缓存
         this.waveformData = null;
@@ -121,7 +121,8 @@ export class AudioClip {
             name: this.name,
             startTime: this.startTime,
             offset: this.offset,
-            duration: this.duration
+            duration: this.duration,
+            gain: this.gain
         });
     }
 

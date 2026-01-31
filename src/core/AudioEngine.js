@@ -65,6 +65,9 @@ export class AudioEngine {
         await this.init();
 
         const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to load audio: ${response.status} ${response.statusText}`);
+        }
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
 
@@ -139,6 +142,25 @@ export class AudioEngine {
      */
     seekTo(time) {
         const wasPlaying = this.isPlaying && !this.isPaused;
+
+        if (!this.audioContext) {
+            // 尝试初始化（通常需要用户手势）；无法同步等待，故短路以避免访问 currentTime 报错
+            this.init().catch((e) => {
+                console.error('AudioEngine init failed in seekTo:', e);
+            });
+
+            if (wasPlaying) {
+                this.stopAllSources();
+            }
+
+            this.currentTime = Math.max(0, time);
+            this.pauseTime = this.currentTime;
+
+            if (this.onTimeUpdate) {
+                this.onTimeUpdate(this.currentTime);
+            }
+            return;
+        }
 
         if (wasPlaying) {
             this.stopAllSources();

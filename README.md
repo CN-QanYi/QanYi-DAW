@@ -1,12 +1,12 @@
-# QanYi DAW
+## QanYi DAW
 
 [English](README.md) | [中文](README.zh-CN.md)
 
 ---
 
-QanYi DAW is a digital audio workstation built with Web technologies. It’s a Vite-powered frontend app focused on arranging audio clips on a timeline with track/mixer style UI.
+QanYi DAW is a digital audio workstation built with Web technologies. It’s a Vite-powered frontend app focused on arranging audio clips on a timeline with track/mixer-style UI.
 
-### Features
+#### Features
 
 - Import audio files (drag & drop supported)
 - Multi-track timeline editing (place clips on tracks over time)
@@ -16,19 +16,19 @@ QanYi DAW is a digital audio workstation built with Web technologies. It’s a V
 
 > Note: Browser audio playback typically requires a user gesture (click/tap) before the AudioContext can start.
 
-### Getting Started
+#### Getting Started
 
-#### Prerequisites
+##### Prerequisites
 
 - Node.js (recommended: a recent LTS)
 
-#### Install
+##### Install
 
 ```bash
 npm install
 ```
 
-#### Run (dev)
+##### Run (dev)
 
 ```bash
 npm run dev
@@ -36,19 +36,19 @@ npm run dev
 
 Vite dev server defaults to `http://localhost:5173` and is configured to open the browser automatically.
 
-#### Build
+##### Build
 
 ```bash
 npm run build
 ```
 
-#### Preview production build
+##### Preview production build
 
 ```bash
 npm run preview
 ```
 
-### Project Structure
+#### Project Structure
 
 - `index.html` — App shell
 - `src/main.js` — App entry and orchestration
@@ -58,7 +58,7 @@ npm run preview
 - `src/ui/` — UI components (Toolbar/Timeline/Mixer/TrackList/Waveform)
 - `src/styles/` — global styles
 
-### Roadmap (ideas)
+#### Roadmap (ideas)
 
 - Undo/redo
 - Snap-to-grid and tempo-aware timeline
