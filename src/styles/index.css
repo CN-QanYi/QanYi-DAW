@@ -1,0 +1,854 @@
+/* =====================================================
+   QanYi DAW - FL Studio 风格深色主题
+   ===================================================== */
+
+/* CSS 变量 - 颜色系统 */
+:root {
+  /* 主色调 */
+  --color-primary: #ff6b35;
+  --color-primary-hover: #ff8555;
+  --color-accent: #00d4ff;
+  --color-accent-hover: #33ddff;
+
+  /* 背景色 */
+  --bg-darkest: #0a0a0f;
+  --bg-darker: #12121a;
+  --bg-dark: #1a1a25;
+  --bg-medium: #252532;
+  --bg-light: #32324a;
+  --bg-lighter: #45456a;
+
+  /* 文字色 */
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0c0;
+  --text-muted: #6a6a8a;
+
+  /* 边框色 */
+  --border-color: #3a3a50;
+  --border-light: #4a4a65;
+
+  /* 功能色 */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-mute: #ef4444;
+  --color-solo: #fbbf24;
+
+  /* 波形色 */
+  --waveform-bg: #1e1e2e;
+  --waveform-fill: #6366f1;
+  --waveform-fill-light: #818cf8;
+
+  /* 时间线色 */
+  --playhead-color: #ff6b35;
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --grid-line-strong: rgba(255, 255, 255, 0.12);
+
+  /* 混音器色 */
+  --meter-green: #22c55e;
+  --meter-yellow: #eab308;
+  --meter-red: #ef4444;
+
+  /* 尺寸 */
+  --toolbar-height: 56px;
+  --track-list-width: 200px;
+  --track-height: 80px;
+  --mixer-height: 160px;
+  --mixer-collapsed-height: 40px;
+
+  /* 动画 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* =====================================================
+   基础样式重置
+   ===================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--bg-darkest);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: var(--toolbar-height) 1fr var(--mixer-height);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app.mixer-collapsed {
+  grid-template-rows: var(--toolbar-height) 1fr var(--mixer-collapsed-height);
+}
+
+/* =====================================================
+   工具栏样式
+   ===================================================== */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  z-index: 100;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.5px;
+}
+
+/* 传输控制按钮 */
+.transport-controls {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-medium);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.transport-btn {
+  width: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.transport-btn:hover {
+  background: var(--bg-light);
+  color: var(--text-primary);
+}
+
+.transport-btn:active {
+  transform: scale(0.95);
+}
+
+.transport-btn.active {
+  background: var(--color-primary);
+  color: var(--text-primary);
+  box-shadow: 0 0 12px rgba(255, 107, 53, 0.4);
+}
+
+.transport-btn .icon {
+  font-size: 16px;
+}
+
+/* BPM 控制 */
+.tempo-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-medium);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.tempo-control label {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bpm-input {
+  width: 60px;
+  padding: 4px 8px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.bpm-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+}
+
+/* 时间显示 */
+.time-display {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--bg-medium);
+  padding: 8px 16px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  min-width: 140px;
+  text-align: center;
+}
+
+/* 操作按钮 */
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #ff8555 100%);
+  border: none;
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+/* =====================================================
+   主内容区
+   ===================================================== */
+.main-content {
+  display: grid;
+  grid-template-columns: var(--track-list-width) 1fr;
+  overflow: hidden;
+  background: var(--bg-darkest);
+}
+
+/* =====================================================
+   音轨列表
+   ===================================================== */
+.track-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-darker);
+  border-right: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.track-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  background: var(--bg-dark);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.add-track-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-light);
+  border: none;
+  border-radius: 6px;
+  color: var(--color-primary);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.add-track-btn:hover {
+  background: var(--color-primary);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.track-items {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 音轨项 */
+.track-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  height: var(--track-height);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-darker);
+  transition: background var(--transition-fast);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.track-item:hover {
+  background: var(--bg-dark);
+}
+
+.track-item.selected {
+  background: var(--bg-medium);
+  border-left: 3px solid var(--color-primary);
+}
+
+.track-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.track-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.track-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.track-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.track-ctrl-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-light);
+  border: none;
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.track-ctrl-btn:hover {
+  background: var(--bg-lighter);
+  color: var(--text-primary);
+}
+
+.track-ctrl-btn.mute-btn.active {
+  background: var(--color-mute);
+  color: var(--text-primary);
+}
+
+.track-ctrl-btn.solo-btn.active {
+  background: var(--color-solo);
+  color: var(--bg-darkest);
+}
+
+/* 音量滑块 */
+.track-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-light);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volume-value {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* =====================================================
+   时间线容器
+   ===================================================== */
+.timeline-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-darkest);
+}
+
+/* 时间刻度尺 */
+.time-ruler {
+  height: 32px;
+  background: var(--bg-dark);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.time-ruler canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* 播放头 */
+.playhead {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  width: 2px;
+  height: calc(100% - 32px);
+  background: var(--playhead-color);
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.playhead::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid var(--playhead-color);
+}
+
+/* 时间线轨道 */
+.timeline-tracks {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 时间线轨道行 */
+.timeline-track {
+  position: relative;
+  height: var(--track-height);
+  background:
+    repeating-linear-gradient(90deg,
+      var(--grid-line) 0px,
+      var(--grid-line) 1px,
+      transparent 1px,
+      transparent 50px),
+    repeating-linear-gradient(90deg,
+      var(--grid-line-strong) 0px,
+      var(--grid-line-strong) 1px,
+      transparent 1px,
+      transparent 200px);
+  border-bottom: 1px solid var(--border-color);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.timeline-track:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+/* 拖动时轨道高亮 */
+.timeline-track.drag-hover {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  outline: 2px dashed var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* 音频片段 */
+.audio-clip {
+  position: absolute;
+  top: 4px;
+  height: calc(100% - 8px);
+  background: linear-gradient(180deg, var(--waveform-fill-light) 0%, var(--waveform-fill) 100%);
+  border-radius: 6px;
+  cursor: grab;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.audio-clip:hover {
+  box-shadow: var(--shadow-md), 0 0 0 2px var(--color-accent);
+}
+
+.audio-clip:active {
+  cursor: grabbing;
+}
+
+.audio-clip.selected {
+  box-shadow: var(--shadow-md), 0 0 0 2px var(--color-primary);
+}
+
+.audio-clip-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audio-clip canvas {
+  width: 100%;
+  height: calc(100% - 24px);
+  display: block;
+}
+
+/* =====================================================
+   混音器
+   ===================================================== */
+.mixer {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+  border-top: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: height var(--transition-normal);
+}
+
+.mixer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-medium);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.toggle-mixer-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.mixer-collapsed .toggle-mixer-btn {
+  transform: rotate(180deg);
+}
+
+.mixer-channels {
+  display: flex;
+  gap: 2px;
+  padding: 12px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.mixer-collapsed .mixer-channels {
+  display: none;
+}
+
+/* 混音器通道 */
+.mixer-channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 60px;
+  padding: 8px;
+  background: var(--bg-dark);
+  border-radius: 6px;
+}
+
+.master-channel {
+  background: linear-gradient(180deg, var(--bg-medium) 0%, var(--bg-dark) 100%);
+  border: 1px solid var(--color-primary);
+  min-width: 80px;
+}
+
+.channel-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.channel-meter {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  height: 60px;
+  background: var(--bg-darkest);
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.meter-fill {
+  flex: 1;
+  background: linear-gradient(180deg,
+      var(--meter-red) 0%,
+      var(--meter-yellow) 20%,
+      var(--meter-green) 40%,
+      var(--meter-green) 100%);
+  border-radius: 2px;
+  transform-origin: bottom;
+  transform: scaleY(0.3);
+  transition: transform 0.05s linear;
+}
+
+.channel-fader {
+  width: 20px;
+  height: 50px;
+  background: var(--bg-light);
+  cursor: pointer;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 4px;
+}
+
+.channel-fader::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.channel-fader::-webkit-slider-runnable-track {
+  background: var(--bg-light);
+  border-radius: 4px;
+}
+
+.channel-value {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* =====================================================
+   拖放覆盖层
+   ===================================================== */
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.drop-overlay.active {
+  display: flex;
+}
+
+.drop-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 64px;
+  background: var(--bg-dark);
+  border: 2px dashed var(--color-primary);
+  border-radius: 16px;
+  animation: pulse 2s infinite;
+}
+
+.drop-icon {
+  font-size: 64px;
+}
+
+.drop-message span:last-child {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+  }
+
+  50% {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+  }
+}
+
+/* =====================================================
+   滚动条样式
+   ===================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-lighter);
+}
+
+/* =====================================================
+   工具提示
+   ===================================================== */
+[title] {
+  position: relative;
+}
+
+/* =====================================================
+   响应式调整
+   ===================================================== */
+@media (max-width: 768px) {
+  :root {
+    --track-list-width: 160px;
+    --track-height: 60px;
+    --mixer-height: 120px;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .time-display {
+    font-size: 14px;
+    min-width: 100px;
+    padding: 6px 10px;
+  }
+}
+
+/* =====================================================
+   右键菜单样式
+   ===================================================== */
+.context-menu {
+  position: fixed;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  padding: 6px 0;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.context-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.context-menu-item:hover {
+  background: var(--bg-light);
+}
+
+.context-menu-item .shortcut {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 20px;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "qanyi-daw",
+  "version": "1.0.0",
+  "description": "FL Studio 风格数字音频工作站",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
