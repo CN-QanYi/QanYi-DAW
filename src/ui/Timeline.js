@@ -313,6 +313,8 @@ export class Timeline {
                     newTime = this.snapTime(newTime);
                 }
 
+                newTime = Math.max(0, newTime);
+
                 clip.setStartTime(newTime);
                 this.updateClipPosition(clip, clipEl);
 
@@ -508,9 +510,9 @@ export class Timeline {
         const closeHandler = (e) => {
             if (!menu.contains(e.target)) {
                 this.hideContextMenu();
-                document.removeEventListener('click', closeHandler);
             }
         };
+        this.contextMenuCloseHandler = closeHandler;
         setTimeout(() => document.addEventListener('click', closeHandler), 0);
     }
 
@@ -518,6 +520,10 @@ export class Timeline {
      * 隐藏右键菜单
      */
     hideContextMenu() {
+        if (this.contextMenuCloseHandler) {
+            document.removeEventListener('click', this.contextMenuCloseHandler);
+            this.contextMenuCloseHandler = null;
+        }
         if (this.contextMenu) {
             this.contextMenu.remove();
             this.contextMenu = null;
@@ -629,9 +635,9 @@ export class Timeline {
         const closeHandler = (e) => {
             if (!menu.contains(e.target)) {
                 this.hideContextMenu();
-                document.removeEventListener('click', closeHandler);
             }
         };
+        this.contextMenuCloseHandler = closeHandler;
         setTimeout(() => document.addEventListener('click', closeHandler), 0);
     }
 

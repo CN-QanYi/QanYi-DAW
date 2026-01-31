@@ -259,7 +259,7 @@ class DAWApp {
 
         const newClip = this.clipboard.clone();
         // 粘贴到当前播放位置或音轨末尾
-        newClip.setStartTime(audioEngine.currentTime || targetTrack.getDuration());
+        newClip.setStartTime(audioEngine.currentTime ?? targetTrack.getDuration());
 
         targetTrack.addClip(newClip);
         this.timeline.addClip(newClip, targetTrack.id);

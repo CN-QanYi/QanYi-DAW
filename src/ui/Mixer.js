@@ -143,19 +143,40 @@ export class Mixer {
         channelEl.className = 'mixer-channel';
         channelEl.dataset.trackId = track.id;
 
-        channelEl.innerHTML = `
-      <div class="channel-label">${track.name}</div>
-      <div class="channel-meter">
-        <div class="meter-fill" style="transform: scaleY(0.2)"></div>
-        <div class="meter-fill" style="transform: scaleY(0.2)"></div>
-      </div>
-      <input type="range" class="channel-fader" min="0" max="100" value="${Math.round(track.volume * 100)}" orient="vertical">
-      <div class="channel-value">${this.volumeToDb(track.volume)}</div>
-    `;
+                const labelEl = document.createElement('div');
+                labelEl.className = 'channel-label';
+                labelEl.textContent = track.name;
 
-        // 推子控制
-        const fader = channelEl.querySelector('.channel-fader');
-        const valueDisplay = channelEl.querySelector('.channel-value');
+                const meterEl = document.createElement('div');
+                meterEl.className = 'channel-meter';
+
+                const meterFillL = document.createElement('div');
+                meterFillL.className = 'meter-fill';
+                meterFillL.style.transform = 'scaleY(0.2)';
+
+                const meterFillR = document.createElement('div');
+                meterFillR.className = 'meter-fill';
+                meterFillR.style.transform = 'scaleY(0.2)';
+
+                meterEl.appendChild(meterFillL);
+                meterEl.appendChild(meterFillR);
+
+                const fader = document.createElement('input');
+                fader.type = 'range';
+                fader.className = 'channel-fader';
+                fader.min = '0';
+                fader.max = '100';
+                fader.value = String(Math.round(track.volume * 100));
+                fader.setAttribute('orient', 'vertical');
+
+                const valueDisplay = document.createElement('div');
+                valueDisplay.className = 'channel-value';
+                valueDisplay.textContent = this.volumeToDb(track.volume);
+
+                channelEl.appendChild(labelEl);
+                channelEl.appendChild(meterEl);
+                channelEl.appendChild(fader);
+                channelEl.appendChild(valueDisplay);
 
         fader.addEventListener('input', (e) => {
             const value = parseInt(e.target.value, 10);
