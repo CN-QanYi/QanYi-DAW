@@ -603,7 +603,9 @@ export class Timeline {
         menu.style.top = `${y}px`;
 
         // 计算点击位置的时间
-        const rect = this.trackElements.get(track.id).getBoundingClientRect();
+        const trackEl = this.trackElements.get(track.id);
+        if (!trackEl) return;
+        const rect = trackEl.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const clickTime = this.snapToGrid ? this.snapTime(clickX / this.pixelsPerSecond) : clickX / this.pixelsPerSecond;
 

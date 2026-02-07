@@ -31,6 +31,12 @@ export class Waveform {
         const rect = this.canvas.getBoundingClientRect();
         const dpr = window.devicePixelRatio || 1;
 
+        if (typeof this.ctx.resetTransform === 'function') {
+            this.ctx.resetTransform();
+        } else {
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
         this.canvas.width = rect.width * dpr;
         this.canvas.height = rect.height * dpr;
 
