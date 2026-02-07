@@ -64,7 +64,7 @@ export class Timeline {
                 const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
                 this.setZoom(this.pixelsPerSecond * zoomFactor);
             }
-        });
+        }, { passive: false });
 
         // 音频引擎时间更新回调
         const originalTimeUpdate = audioEngine.onTimeUpdate;
@@ -201,7 +201,7 @@ export class Timeline {
         // 轨道右键菜单（空白区域）
         trackEl.addEventListener('contextmenu', (e) => {
             // 只有点击空白区域才显示轨道菜单
-            if (e.target === trackEl || e.target.closest('.timeline-track') === trackEl && !e.target.closest('.audio-clip')) {
+            if ((e.target === trackEl || e.target.closest('.timeline-track') === trackEl) && !e.target.closest('.audio-clip')) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.showTrackContextMenu(e.clientX, e.clientY, track, e);
@@ -217,6 +217,25 @@ export class Timeline {
      * @param {string} trackId - 音轨 ID
      */
     removeTrack(trackId) {
+        const track = audioEngine.tracks.find(t => t.id === trackId);
+        const clipIds = track?.clips?.map(clip => clip.id) ?? [];
+        clipIds.forEach((clipId) => {
+            const clipEl = this.clipElements.get(clipId);
+            if (clipEl) {
+                clipEl.remove();
+                this.clipElements.delete(clipId);
+            }
+
+            const waveform = this.clipWaveforms.get(clipId);
+            if (waveform) {
+                if (waveform.canvas && waveform.canvas.parentNode) {
+                    waveform.canvas.parentNode.removeChild(waveform.canvas);
+                }
+                waveform.destroy();
+                this.clipWaveforms.delete(clipId);
+            }
+        });
+
         const trackEl = this.trackElements.get(trackId);
         if (trackEl) {
             trackEl.remove();
