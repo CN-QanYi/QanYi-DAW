@@ -15,6 +15,19 @@ export class Mixer {
         this.masterMeterL = document.getElementById('master-meter-l');
         this.masterMeterR = document.getElementById('master-meter-r');
 
+        const missing = [];
+        if (!this.container) missing.push('mixer');
+        if (!this.header) missing.push('mixer-header');
+        if (!this.channelsContainer) missing.push('mixer-channels');
+        if (!this.toggleBtn) missing.push('btn-toggle-mixer');
+        if (!this.masterFader) missing.push('master-fader');
+        if (!this.masterValue) missing.push('master-value');
+        if (!this.masterMeterL) missing.push('master-meter-l');
+        if (!this.masterMeterR) missing.push('master-meter-r');
+        if (missing.length > 0) {
+            throw new Error(`Missing DOM element: ${missing.join(', ')}`);
+        }
+
         // 通道元素映射
         this.channelElements = new Map();
 

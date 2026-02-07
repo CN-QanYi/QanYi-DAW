@@ -218,6 +218,8 @@ export class TrackList {
         if (this.selectedTrackId === trackId) {
             this.selectedTrackId = null;
         }
+
+        this.handleSoloLogic();
     }
 
     /**

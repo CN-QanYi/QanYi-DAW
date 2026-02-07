@@ -20,6 +20,9 @@ class DAWApp {
 
         // 拖放状态
         this.dropOverlay = document.getElementById('drop-overlay');
+        if (!this.dropOverlay) {
+            throw new Error('Missing DOM element: drop-overlay');
+        }
 
         // 剪贴板
         this.clipboard = null;
@@ -130,7 +133,7 @@ class DAWApp {
             e.preventDefault();
             dragCounter++;
             if (e.dataTransfer.types.includes('Files')) {
-                this.dropOverlay.classList.add('active');
+                this.dropOverlay?.classList.add('active');
             }
         });
 
@@ -138,7 +141,7 @@ class DAWApp {
             e.preventDefault();
             dragCounter--;
             if (dragCounter === 0) {
-                this.dropOverlay.classList.remove('active');
+                this.dropOverlay?.classList.remove('active');
             }
         });
 
@@ -149,7 +152,7 @@ class DAWApp {
         document.addEventListener('drop', (e) => {
             e.preventDefault();
             dragCounter = 0;
-            this.dropOverlay.classList.remove('active');
+            this.dropOverlay?.classList.remove('active');
 
             const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('audio/'));
             if (files.length > 0) {
@@ -416,6 +419,7 @@ class DAWApp {
             this.timeline.removeTrack(track.id);
             this.trackList.removeTrack(track.id);
             this.mixer.removeChannel(track.id);
+            audioEngine.removeTrack(track.id);
 
             console.log(`🗑️ 已删除音轨: ${track.name}`);
         }

@@ -294,6 +294,9 @@ export class Timeline {
 
         // 创建波形
         setTimeout(() => {
+            if (!waveformContainer.isConnected || !this.clipElements.has(clip.id)) {
+                return;
+            }
             const waveform = createWaveformForClip(clip, waveformContainer, {
                 fillColor: 'rgba(99, 102, 241, 0.6)',
                 lineColor: '#a5b4fc'
@@ -616,6 +619,7 @@ export class Timeline {
 
         if (clipEl && toTrackEl) {
             toTrackEl.appendChild(clipEl);
+            clipEl.dataset.trackId = String(toTrackId);
         }
     }
 

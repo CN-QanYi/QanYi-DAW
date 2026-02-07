@@ -14,13 +14,13 @@
       <div class="toolbar-left">
         <div class="logo">🎵 QanYi DAW</div>
         <div class="transport-controls">
-          <button id="btn-stop" class="transport-btn" title="停止" aria-label="停止">
+          <button id="btn-stop" class="transport-btn has-tooltip" title="停止" aria-label="停止">
             <span class="icon" aria-hidden="true">⏹</span>
           </button>
-          <button id="btn-play" class="transport-btn" title="播放" aria-label="播放">
+          <button id="btn-play" class="transport-btn has-tooltip" title="播放" aria-label="播放">
             <span class="icon" aria-hidden="true">▶</span>
           </button>
-          <button id="btn-pause" class="transport-btn" title="暂停" aria-label="暂停">
+          <button id="btn-pause" class="transport-btn has-tooltip" title="暂停" aria-label="暂停">
             <span class="icon" aria-hidden="true">⏸</span>
           </button>
         </div>
@@ -44,7 +44,7 @@
       <aside id="track-list" class="track-list">
         <div class="track-list-header">
           <span>音轨</span>
-          <button id="btn-add-track" class="add-track-btn" title="添加音轨">+</button>
+          <button id="btn-add-track" class="add-track-btn has-tooltip" title="添加音轨">+</button>
         </div>
         <div id="track-items" class="track-items">
           <!-- 音轨项将动态添加 -->
@@ -70,17 +70,17 @@
     <footer id="mixer" class="mixer">
       <div class="mixer-header">
         <span>混音器</span>
-        <button id="btn-toggle-mixer" class="toggle-mixer-btn" title="切换混音器" aria-label="切换混音器"><span class="icon" aria-hidden="true">▼</span></button>
+        <button id="btn-toggle-mixer" class="toggle-mixer-btn has-tooltip" title="切换混音器" aria-label="切换混音器"><span class="icon" aria-hidden="true">▼</span></button>
       </div>
       <div id="mixer-channels" class="mixer-channels">
         <!-- 混音器通道将动态添加 -->
         <div class="mixer-channel master-channel">
-          <div class="channel-label">MASTER</div>
+          <div class="channel-label" id="master-label">MASTER</div>
           <div class="channel-meter">
             <div class="meter-fill" id="master-meter-l"></div>
             <div class="meter-fill" id="master-meter-r"></div>
           </div>
-          <input type="range" class="channel-fader" id="master-fader" min="0" max="100" value="80" orient="vertical">
+          <input type="range" class="channel-fader" id="master-fader" min="0" max="100" value="80" orient="vertical" aria-labelledby="master-label master-value">
           <div class="channel-value" id="master-value">0 dB</div>
         </div>
       </div>
