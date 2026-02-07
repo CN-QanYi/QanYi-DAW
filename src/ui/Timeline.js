@@ -22,6 +22,7 @@ export class Timeline {
         // 状态
         this.trackElements = new Map();
         this.clipElements = new Map();
+        this.clipWaveforms = new Map();
         this.selectedClip = null;
         this.draggingClip = null;
         this.dragStartX = 0;
@@ -268,10 +269,11 @@ export class Timeline {
 
         // 创建波形
         setTimeout(() => {
-            createWaveformForClip(clip, waveformContainer, {
+            const waveform = createWaveformForClip(clip, waveformContainer, {
                 fillColor: 'rgba(99, 102, 241, 0.6)',
                 lineColor: '#a5b4fc'
             });
+            this.clipWaveforms.set(clip.id, waveform);
         }, 0);
 
         // 点击选择
@@ -452,6 +454,12 @@ export class Timeline {
         if (clipEl) {
             clipEl.remove();
             this.clipElements.delete(clip.id);
+        }
+
+        const waveform = this.clipWaveforms.get(clip.id);
+        if (waveform) {
+            waveform.destroy();
+            this.clipWaveforms.delete(clip.id);
         }
 
         this.selectedClip = null;
