@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QanYi DAW - 数字音频工作站</title>
+  <meta name="description" content="一款基于 Web 技术的专业音频编曲软件">
+  <link rel="stylesheet" href="/src/styles/index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部工具栏 -->
+    <header id="toolbar" class="toolbar">
+      <div class="toolbar-left">
+        <div class="logo">🎵 QanYi DAW</div>
+        <div class="transport-controls">
+          <button id="btn-stop" class="transport-btn has-tooltip" title="停止" aria-label="停止">
+            <span class="icon" aria-hidden="true">⏹</span>
+          </button>
+          <button id="btn-play" class="transport-btn has-tooltip" title="播放" aria-label="播放">
+            <span class="icon" aria-hidden="true">▶</span>
+          </button>
+          <button id="btn-pause" class="transport-btn has-tooltip" title="暂停" aria-label="暂停">
+            <span class="icon" aria-hidden="true">⏸</span>
+          </button>
+        </div>
+        <div class="tempo-control">
+          <label for="bpm-input">BPM</label>
+          <input type="number" id="bpm-input" class="bpm-input" value="120" min="20" max="300">
+        </div>
+        <div class="time-display" id="time-display">001:01:000</div>
+      </div>
+      <div class="toolbar-right">
+        <button id="btn-import" class="action-btn">
+          <span class="icon">📁</span> 导入音频
+        </button>
+        <input type="file" id="file-input" accept="audio/*" multiple hidden>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main id="main-content" class="main-content">
+      <!-- 左侧音轨列表 -->
+      <aside id="track-list" class="track-list">
+        <div class="track-list-header">
+          <span>音轨</span>
+          <button id="btn-add-track" class="add-track-btn has-tooltip" title="添加音轨">+</button>
+        </div>
+        <div id="track-items" class="track-items">
+          <!-- 音轨项将动态添加 -->
+        </div>
+      </aside>
+
+      <!-- 时间线编辑区 -->
+      <section id="timeline-container" class="timeline-container">
+        <!-- 时间刻度尺 -->
+        <div id="time-ruler" class="time-ruler">
+          <canvas id="ruler-canvas"></canvas>
+        </div>
+        <!-- 播放头 -->
+        <div id="playhead" class="playhead"></div>
+        <!-- 音轨时间线 -->
+        <div id="timeline-tracks" class="timeline-tracks">
+          <!-- 时间线轨道将动态添加 -->
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部混音器 -->
+    <footer id="mixer" class="mixer">
+      <div class="mixer-header">
+        <span>混音器</span>
+        <button id="btn-toggle-mixer" class="toggle-mixer-btn has-tooltip" title="切换混音器" aria-label="切换混音器"><span class="icon" aria-hidden="true">▼</span></button>
+      </div>
+      <div id="mixer-channels" class="mixer-channels">
+        <!-- 混音器通道将动态添加 -->
+        <div class="mixer-channel master-channel">
+          <div class="channel-label" id="master-label">MASTER</div>
+          <div class="channel-meter">
+            <div class="meter-fill" id="master-meter-l"></div>
+            <div class="meter-fill" id="master-meter-r"></div>
+          </div>
+          <input type="range" class="channel-fader" id="master-fader" min="0" max="100" value="80" orient="vertical" aria-labelledby="master-label master-value">
+          <div class="channel-value" id="master-value">0 dB</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 拖放覆盖层 -->
+  <div id="drop-overlay" class="drop-overlay">
+    <div class="drop-message">
+      <span class="drop-icon">📂</span>
+      <span>拖放音频文件到此处</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
