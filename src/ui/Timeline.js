@@ -217,8 +217,13 @@ export class Timeline {
      * @param {string} trackId - 音轨 ID
      */
     removeTrack(trackId) {
-        const track = audioEngine.tracks.find(t => t.id === trackId);
-        const clipIds = track?.clips?.map(clip => clip.id) ?? [];
+        const clipIds = [];
+        this.clipElements.forEach((clipEl, clipId) => {
+            if (clipEl?.dataset?.trackId === trackId) {
+                clipIds.push(clipId);
+            }
+        });
+
         clipIds.forEach((clipId) => {
             const clipEl = this.clipElements.get(clipId);
             if (clipEl) {
@@ -255,6 +260,7 @@ export class Timeline {
         const clipEl = document.createElement('div');
         clipEl.className = 'audio-clip';
         clipEl.dataset.clipId = clip.id;
+        clipEl.dataset.trackId = trackId;
 
         // 设置位置和宽度
         this.updateClipPosition(clip, clipEl);
