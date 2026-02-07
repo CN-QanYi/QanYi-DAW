@@ -208,8 +208,6 @@ export class TrackList {
      * @param {string} trackId - 音轨 ID
      */
     removeTrack(trackId) {
-        audioEngine.removeTrack(trackId);
-
         const trackEl = this.container.querySelector(`[data-track-id="${trackId}"]`);
         if (trackEl) {
             trackEl.remove();

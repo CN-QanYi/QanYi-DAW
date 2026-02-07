@@ -14,6 +14,16 @@ export class Timeline {
         this.playhead = document.getElementById('playhead');
         this.tracksContainer = document.getElementById('timeline-tracks');
 
+        const missing = [];
+        if (!this.container) missing.push('timeline-container');
+        if (!this.timeRuler) missing.push('time-ruler');
+        if (!this.rulerCanvas) missing.push('ruler-canvas');
+        if (!this.playhead) missing.push('playhead');
+        if (!this.tracksContainer) missing.push('timeline-tracks');
+        if (missing.length > 0) {
+            throw new Error(`Missing DOM element: ${missing.join(', ')}`);
+        }
+
         // 配置
         this.pixelsPerSecond = 50; // 缩放级别
         this.snapToGrid = true;
@@ -39,6 +49,9 @@ export class Timeline {
      * 初始化时间线
      */
     init() {
+        if (!this.container || !this.timeRuler || !this.rulerCanvas || !this.playhead || !this.tracksContainer) {
+            return;
+        }
         // 设置 canvas 尺寸
         this.resizeRuler();
 
