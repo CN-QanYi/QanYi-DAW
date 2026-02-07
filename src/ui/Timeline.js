@@ -502,7 +502,7 @@ export class Timeline {
             waveform.destroy();
             this.clipWaveforms.delete(clip.id);
         }
-
+        clip.selected = false;
         this.selectedClip = null;
     }
 
