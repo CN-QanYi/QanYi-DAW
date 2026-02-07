@@ -10,11 +10,11 @@ export class TrackList {
         this.container = document.getElementById('track-items');
         this.btnAddTrack = document.getElementById('btn-add-track');
 
-        if (!this.container) {
-            console.error('TrackList: container #track-items not found');
-        }
-        if (!this.btnAddTrack) {
-            console.error('TrackList: button #btn-add-track not found');
+        const missing = [];
+        if (!this.container) missing.push('track-items');
+        if (!this.btnAddTrack) missing.push('btn-add-track');
+        if (missing.length > 0) {
+            throw new Error(`Missing DOM element: ${missing.join(', ')}`);
         }
 
         // 事件回调
@@ -32,8 +32,6 @@ export class TrackList {
      * 初始化
      */
     init() {
-        if (!this.btnAddTrack) return;
-
         this.btnAddTrack.addEventListener('click', () => {
             this.addNewTrack();
         });
@@ -150,6 +148,9 @@ export class TrackList {
             track.setVolume(volume);
             volumeValue.textContent = `${e.target.value}%`;
 
+            // 重新应用 solo 逻辑，确保音量变化不破坏 solo 状态
+            this.handleSoloLogic();
+
             if (this.onTrackUpdate) {
                 this.onTrackUpdate(track);
             }
@@ -166,17 +167,7 @@ export class TrackList {
         const hasSolo = audioEngine.tracks.some(t => t.solo);
 
         audioEngine.tracks.forEach(track => {
-            if (hasSolo) {
-                // 有独奏时：静音优先，其次独奏保留音量，其他为 0
-                if (track.gainNode) {
-                    track.gainNode.gain.value = track.muted ? 0 : (track.solo ? track.volume : 0);
-                }
-            } else {
-                // 无独奏时，恢复正常
-                if (track.gainNode) {
-                    track.gainNode.gain.value = track.muted ? 0 : track.volume;
-                }
-            }
+            track._applyGain(hasSolo);
         });
     }
 

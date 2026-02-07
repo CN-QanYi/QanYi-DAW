@@ -76,6 +76,10 @@ class DAWApp {
             console.log('选中音轨:', track.name);
         };
 
+        this.trackList.onTrackUpdate = (track) => {
+            this.mixer.updateChannel(track);
+        };
+
         // 时间线文件拖放
         this.timeline.onFileDrop = (files, trackId, time) => {
             this.importAudioFilesToTrack(files, trackId, time);
@@ -262,7 +266,7 @@ class DAWApp {
 
         const newClip = this.clipboard.clone();
         // 粘贴到当前播放位置或音轨末尾
-        newClip.setStartTime(audioEngine.currentTime ?? targetTrack.getDuration());
+        newClip.setStartTime(audioEngine.currentTime || targetTrack.getDuration());
 
         targetTrack.addClip(newClip);
         this.timeline.addClip(newClip, targetTrack.id);

@@ -56,9 +56,7 @@ export class Track {
      */
     setVolume(volume) {
         this.volume = Math.max(0, Math.min(1, volume));
-        if (this.gainNode) {
-            this.gainNode.gain.value = this.muted ? 0 : this.volume;
-        }
+        this._applyGain();
     }
 
     /**
@@ -67,8 +65,21 @@ export class Track {
      */
     setMuted(muted) {
         this.muted = muted;
-        if (this.gainNode) {
-            this.gainNode.gain.value = this.muted ? 0 : this.volume;
+        this._applyGain();
+    }
+
+    /**
+     * 根据静音和独奏状态计算并应用实际增益值
+     * @param {boolean} [hasSoloTrack] - 是否有其他轨道处于独奏状态
+     */
+    _applyGain(hasSoloTrack = false) {
+        if (!this.gainNode) return;
+        if (this.muted) {
+            this.gainNode.gain.value = 0;
+        } else if (hasSoloTrack && !this.solo) {
+            this.gainNode.gain.value = 0;
+        } else {
+            this.gainNode.gain.value = this.volume;
         }
     }
 
