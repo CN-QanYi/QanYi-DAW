@@ -237,6 +237,10 @@ export class Timeline {
             }
         });
 
+        if (this.selectedClip && (this.selectedClip.trackId === trackId || clipIds.includes(this.selectedClip.id))) {
+            this.deselectClip();
+        }
+
         clipIds.forEach((clipId) => {
             const clipEl = this.clipElements.get(clipId);
             if (clipEl) {
@@ -619,9 +623,6 @@ export class Timeline {
 
         // 从原轨道移除
         fromTrack.removeClip(clip.id);
-
-        // 更新片段的轨道引用
-        clip.trackId = toTrackId;
 
         // 添加到新轨道
         toTrack.addClip(clip);
